@@ -5,8 +5,8 @@
 #include <Adafruit_NeoPixel.h>
 #include <TimeLib.h>
 
-const char *ssid = "Garaffa";
-const char *password = "1fourkids";
+const char *ssid = "SSID";
+const char *password = "Wireless-Password";
 
 const int LED_PIN = D7;
 const int LED_COUNT = 130;  // Adjust the number of LEDs in your strip
