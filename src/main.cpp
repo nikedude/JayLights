@@ -311,7 +311,7 @@ void controlNeoPixel(String payload) {
         default:
           break;
       }
-    } else if (i == 71) { // jet
+    } else if (i == 70) { // jet
       switch (dataPoint) {
         case 3: // On Hold
           for (j = 0; j < jet; j++) { 
