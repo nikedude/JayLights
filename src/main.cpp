@@ -315,8 +315,8 @@ void controlNeoPixel(String payload) {
       switch (dataPoint) {
         case 3: // On Hold
           for (j = 0; j < jet; j++) { 
-            //setPixelColor(x + flyer + metro + tram + village + taxi + bonnie + j, 255, 255, 0);// Yellow
-            blinkChairliftPixelColor(x + flyer + metro + tram + village + taxi + bonnie + j, 0, 0, 255, j * 1000, jet * 1000, 0, dataPoint);
+            setPixelColor(x + flyer + metro + tram + village + taxi + bonnie + j, 255, 255, 0);// Yellow
+            // blinkChairliftPixelColor(x + flyer + metro + tram + village + taxi + bonnie + j, 0, 0, 255, j * 1000, jet * 1000, 0, dataPoint);
           }
           break;
         case 4: // Closed
@@ -326,8 +326,8 @@ void controlNeoPixel(String payload) {
           break;
         case 5: // Open
           for (j = 0; j < jet; j++) { 
-            //blinkChairliftPixelColor(x + flyer + metro + tram + village + taxi + bonnie + j, 0, 0, 255, j * 1000, jet * 1000, 0, dataPoint);
-            setPixelColor(x + flyer + metro + tram + village + taxi + bonnie + j, 255, 255, 0);// Yellow
+            blinkChairliftPixelColor(x + flyer + metro + tram + village + taxi + bonnie + j, 0, 0, 255, j * 1000, jet * 1000, 0, dataPoint);
+            // setPixelColor(x + flyer + metro + tram + village + taxi + bonnie + j, 255, 255, 0);// Yellow
           }
           break;
         default:
@@ -345,7 +345,7 @@ void controlNeoPixel(String payload) {
           blinkPixelColor(i, 0, 255, 0, 500, 0, dataPoint); // Blinking Green every 500 milliseconds
           break;
         case 6: // Partially Open
-          setPixelColor(i, 255, 255, 0); // Yellow
+          blinkPixelColor(i, 255, 255, 0, 500, 0, dataPoint); // Blinking Yellow every 500 milliseconds
           break;
         default:
           break;
