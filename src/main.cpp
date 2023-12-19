@@ -298,26 +298,10 @@ void check_value_5(int start, int end, int &led_to_check)
     }
     led_to_check = 0;
   }
-  else if (led_value[led_to_check] == 5)
+  else
   {
     setPixelColor(led_to_check, 0, 0, 255); // Blue
     led_to_check++;
-    if (led_to_check == end)
-    {
-      for (int i = start; i < led_to_check; i++)
-      {
-        setPixelColor(i, 0, 0, 0); // Off
-      }
-      led_to_check = 0;
-    }
-  }
-  else
-  {
-    for (int i = start; i < led_to_check; i++)
-    {
-      setPixelColor(i, 0, 0, 0); // Off
-    }
-    led_to_check = 0;
   }
 }
 
