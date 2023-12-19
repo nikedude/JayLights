@@ -5,6 +5,11 @@
 #include <TimeLib.h>
 #include <WiFiClientSecureBearSSL.h>
 
+#define INITIAL_DELAY 5000
+#define HTTP_GET_DELAY 300000
+#define LED_BLINK_DELAY 500
+#define LED_SPECIAL_DELAY 500
+
 #define SINGLE_LED_CHARACTERS 64
 #define FLYER_LEN 8
 #define METRO_LEN 6
@@ -36,6 +41,7 @@ Adafruit_NeoPixel pixels(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 unsigned long previousMillisGet = 0;
 unsigned long previousMillisLED = 0;
+unsigned long previousMillisSpecial = 0;
 
 int led_to_check_flyer = 0;
 int led_to_check_metro = 0;
@@ -138,15 +144,6 @@ void performHTTPGET()
 void setPixelColor(int index, uint8_t r, uint8_t g, uint8_t b)
 {
   pixels.setPixelColor(index, pixels.Color(r, g, b));
-  Serial.print("Setting pixel ");
-  Serial.print(index);
-  Serial.print(" to ");
-  Serial.print(r);
-  Serial.print(" ");
-  Serial.print(g);
-  Serial.print(" ");
-  Serial.println(b);
-
 }
 
 
@@ -349,7 +346,7 @@ void setup()
   while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print('.');
-    delay(1000);
+    delay(INITIAL_DELAY);
   }
 
   setSystemTime();
@@ -370,19 +367,24 @@ void setup()
 void loop()
 {
   // Update blinking LEDs every 500 milliseconds
-  if (millis() - previousMillisLED >= 500)
+  if (millis() - previousMillisLED >= LED_BLINK_DELAY)
   {
-    Serial.println("--------------------");
     update_blinking_leds();
-    update_special_leds();
     pixels.show();
     previousMillisLED = millis();
+  }
+
+  if (millis() - previousMillisSpecial >= LED_SPECIAL_DELAY)
+  {
+    update_special_leds();
+    pixels.show();
+    previousMillisSpecial = millis();
   }
 
   // Perform GET request every 5 minutes after the initial GET
   if (WiFi.status() == WL_CONNECTED)
   {
-    if (millis() - previousMillisGet >= 300000)
+    if (millis() - previousMillisGet >= HTTP_GET_DELAY)
     { // 5 minutes
       previousMillisGet = millis();
       performHTTPGET();
