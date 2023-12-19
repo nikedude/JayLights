@@ -346,6 +346,7 @@ void setup()
 
   // Perform the first GET request
   performHTTPGET();
+  set_led_values();
   set_solid_leds();
 }
 
