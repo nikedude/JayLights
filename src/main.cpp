@@ -6,20 +6,29 @@
 #include <WiFiClientSecureBearSSL.h>
 
 #define SINGLE_LED_CHARACTERS 64
-#define FLYER 8
-#define METRO 6
-#define TRAM 10
-#define VILLAGE 4
-#define TAXI 4
-#define BONNIE 8
-#define JET 6
+#define FLYER_LEN 8
+#define METRO_LEN 6
+#define TRAM_LEN 10
+#define VILLAGE_LEN 4
+#define TAXI_LEN 4
+#define BONNIE_LEN 8
+#define JET_LEN 6
 
-const char *ssid = "SSID";
-const char *password = "Wireless-Password";
+#define FLYER_START 64
+#define METRO_START 72
+#define TRAM_START 78
+#define VILLAGE_START 88
+#define TAXI_START 92
+#define BONNIE_START 96
+#define JET_START 104
+
+
+const char *ssid = "Cega-2GHz";
+const char *password = "emulador4";
 
 const int LED_PIN = D7;
-const int LED_COUNT = SINGLE_LED_CHARACTERS + FLYER + METRO + TRAM + VILLAGE +
-                      TAXI + BONNIE + JET;
+const int LED_COUNT = SINGLE_LED_CHARACTERS + FLYER_LEN + METRO_LEN + TRAM_LEN + VILLAGE_LEN +
+                      TAXI_LEN + BONNIE_LEN + JET_LEN;
 
 uint8_t led_value[LED_COUNT]; // An array to store individual LED values
 
@@ -28,12 +37,14 @@ Adafruit_NeoPixel pixels(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 unsigned long previousMillisGet = 0;
 unsigned long previousMillisLED = 0;
 
-// unsigned long *previousMillisBlink = nullptr;
-// unsigned long *startMillisDelay = nullptr;
+int led_to_check_flyer = 0;
+int led_to_check_metro = 0;
+int led_to_check_tram = 0;
+int led_to_check_village = 0;
+int led_to_check_taxi = 0;
+int led_to_check_bonnie = 0;
+int led_to_check_jet = 0;
 
-// bool alternateColorFlags[LED_COUNT][2] = {
-//     false};               // An array to store individual alternateColorFlag
-//     for each LED
 String mostRecentPayload; // Store the most recent payload globally
 String staticPayload =
     "00000000000000000000000000000000000000000000000000000000000000004444444";
@@ -127,6 +138,15 @@ void performHTTPGET()
 void setPixelColor(int index, uint8_t r, uint8_t g, uint8_t b)
 {
   pixels.setPixelColor(index, pixels.Color(r, g, b));
+  Serial.print("Setting pixel ");
+  Serial.print(index);
+  Serial.print(" to ");
+  Serial.print(r);
+  Serial.print(" ");
+  Serial.print(g);
+  Serial.print(" ");
+  Serial.println(b);
+
 }
 
 
@@ -139,45 +159,50 @@ void set_led_values()
   {
     led_value[i] = mostRecentPayload.charAt(i) - '0';
   }
-  for (i = SINGLE_LED_CHARACTERS; i < (SINGLE_LED_CHARACTERS + FLYER); i++)
+  for (i = SINGLE_LED_CHARACTERS; i < (SINGLE_LED_CHARACTERS + FLYER_LEN); i++)
   {
     led_value[i] = mostRecentPayload.charAt(SINGLE_LED_CHARACTERS) - '0';
   }
-  for (i = (SINGLE_LED_CHARACTERS + FLYER);
-       i < (SINGLE_LED_CHARACTERS + FLYER + METRO); i++)
+  for (i = (SINGLE_LED_CHARACTERS + FLYER_LEN);
+       i < (SINGLE_LED_CHARACTERS + FLYER_LEN + METRO_LEN); i++)
   {
     led_value[i] = mostRecentPayload.charAt(65) - '0';
   }
-  for (i = (SINGLE_LED_CHARACTERS + FLYER + METRO);
-       i < (SINGLE_LED_CHARACTERS + FLYER + METRO + TRAM); i++)
+  for (i = (SINGLE_LED_CHARACTERS + FLYER_LEN + METRO_LEN);
+       i < (SINGLE_LED_CHARACTERS + FLYER_LEN + METRO_LEN + TRAM_LEN); i++)
   {
     led_value[i] = mostRecentPayload.charAt(66) - '0';
   }
-  for (i = (SINGLE_LED_CHARACTERS + FLYER + METRO + TRAM);
-       i < (SINGLE_LED_CHARACTERS + FLYER + METRO + TRAM + VILLAGE); i++)
+  for (i = (SINGLE_LED_CHARACTERS + FLYER_LEN + METRO_LEN + TRAM_LEN);
+       i < (SINGLE_LED_CHARACTERS + FLYER_LEN + METRO_LEN + TRAM_LEN + VILLAGE_LEN); i++)
   {
     led_value[i] = mostRecentPayload.charAt(67) - '0';
   }
-  for (i = (SINGLE_LED_CHARACTERS + FLYER + METRO + TRAM + VILLAGE);
-       i < (SINGLE_LED_CHARACTERS + FLYER + METRO + TRAM + VILLAGE + TAXI);
+  for (i = (SINGLE_LED_CHARACTERS + FLYER_LEN + METRO_LEN + TRAM_LEN + VILLAGE_LEN);
+       i < (SINGLE_LED_CHARACTERS + FLYER_LEN + METRO_LEN + TRAM_LEN + VILLAGE_LEN + TAXI_LEN);
        i++)
   {
     led_value[i] = mostRecentPayload.charAt(68) - '0';
   }
-  for (i = (SINGLE_LED_CHARACTERS + FLYER + METRO + TRAM + VILLAGE + TAXI);
+  for (i = (SINGLE_LED_CHARACTERS + FLYER_LEN + METRO_LEN + TRAM_LEN + VILLAGE_LEN + TAXI_LEN);
        i <
-       (SINGLE_LED_CHARACTERS + FLYER + METRO + TRAM + VILLAGE + TAXI + BONNIE);
+       (SINGLE_LED_CHARACTERS + FLYER_LEN + METRO_LEN + TRAM_LEN + VILLAGE_LEN + TAXI_LEN + BONNIE_LEN);
        i++)
   {
     led_value[i] = mostRecentPayload.charAt(69) - '0';
   }
-  for (i = (SINGLE_LED_CHARACTERS + FLYER + METRO + TRAM + VILLAGE + TAXI +
-            BONNIE);
-       i < (SINGLE_LED_CHARACTERS + FLYER + METRO + TRAM + VILLAGE + TAXI +
-            BONNIE + JET);
+  for (i = (SINGLE_LED_CHARACTERS + FLYER_LEN + METRO_LEN + TRAM_LEN + VILLAGE_LEN + TAXI_LEN +
+            BONNIE_LEN);
+       i < (SINGLE_LED_CHARACTERS + FLYER_LEN + METRO_LEN + TRAM_LEN + VILLAGE_LEN + TAXI_LEN +
+            BONNIE_LEN + JET_LEN);
        i++)
   {
     led_value[i] = mostRecentPayload.charAt(70) - '0';
+  }
+
+  for(i = 0; i < LED_COUNT; i++)
+  {
+    Serial.print(led_value[i]);
   }
 }
 
@@ -253,22 +278,51 @@ void update_blinking_leds()
   led_is_on = !led_is_on;
 }
 
-int look_for_value_5()
-{
-  int i = 0;
-  for (i = SINGLE_LED_CHARACTERS; i < LED_COUNT; i++)
+void check_value_5(int start, int end, int &led_to_check)
+{  
+  if (led_value[start] != 5) // not special led found
   {
-    if (led_value[i] == 5)
+    return;
+  }
+
+  if (led_to_check == 0)
+  {
+    setPixelColor(start, 0, 0, 255); // Blue
+    led_to_check = start + 1;
+  }
+  else if (led_to_check == end)
+  {
+    for (int i = start; i < led_to_check; i++)
     {
-      return i;
+      setPixelColor(i, 0, 0, 0); // Off
+    }
+    led_to_check = 0;
+  }
+  else if (led_value[led_to_check] == 5)
+  {
+    setPixelColor(led_to_check, 0, 0, 255); // Blue
+    led_to_check++;
+    if (led_to_check == end)
+    {
+      for (int i = start; i < led_to_check; i++)
+      {
+        setPixelColor(i, 0, 0, 0); // Off
+      }
+      led_to_check = 0;
     }
   }
-  return 0;
+  else
+  {
+    for (int i = start; i < led_to_check; i++)
+    {
+      setPixelColor(i, 0, 0, 0); // Off
+    }
+    led_to_check = 0;
+  }
 }
 
 void update_special_leds()
 {
-  static int led_to_check = 0;
   static int times_called = 0;
   times_called++;
   if (times_called == 1)
@@ -280,46 +334,25 @@ void update_special_leds()
     times_called = 0;
   }
 
-  int first_special_led = look_for_value_5();
-  if (first_special_led == 0) // not special led found
-  {
-    return;
-  }
+  check_value_5(FLYER_START, METRO_START, led_to_check_jet);
+  check_value_5(METRO_START, TRAM_START, led_to_check_flyer);
+  check_value_5(TRAM_START, VILLAGE_START, led_to_check_metro);
+  check_value_5(VILLAGE_START, TAXI_START, led_to_check_tram);
+  check_value_5(TAXI_START, BONNIE_START, led_to_check_village);
+  check_value_5(BONNIE_START, JET_START, led_to_check_taxi);
+  check_value_5(JET_START, LED_COUNT, led_to_check_bonnie);
+  
+}
 
-  if (led_to_check == 0)
-  {
-    setPixelColor(first_special_led, 0, 0, 255); // Blue
-    led_to_check = first_special_led + 1;
-  }
-  else if (led_to_check == LED_COUNT)
-  {
-    for (int i = first_special_led; i < led_to_check; i++)
-    {
-      setPixelColor(i, 0, 0, 0); // Off
-    }
-    led_to_check = 0;
-  }
-  else if (led_value[led_to_check] == 5)
-  {
-    setPixelColor(led_to_check, 0, 0, 255); // Blue
-    led_to_check++;
-    if (led_to_check == LED_COUNT)
-    {
-      for (int i = first_special_led; i < led_to_check; i++)
-      {
-        setPixelColor(i, 0, 0, 0); // Off
-      }
-      led_to_check = 0;
-    }
-  }
-  else
-  {
-    for (int i = first_special_led; i < led_to_check; i++)
-    {
-      setPixelColor(i, 0, 0, 0); // Off
-    }
-    led_to_check = 0;
-  }
+void led_to_check_reset()
+{
+  led_to_check_flyer = 0;
+  led_to_check_metro = 0;
+  led_to_check_tram = 0;
+  led_to_check_village = 0;
+  led_to_check_taxi = 0;
+  led_to_check_bonnie = 0;
+  led_to_check_jet = 0;
 }
 
 void setup()
@@ -355,6 +388,7 @@ void loop()
   // Update blinking LEDs every 500 milliseconds
   if (millis() - previousMillisLED >= 500)
   {
+    Serial.println("--------------------");
     update_blinking_leds();
     update_special_leds();
     pixels.show();
@@ -368,7 +402,9 @@ void loop()
     { // 5 minutes
       previousMillisGet = millis();
       performHTTPGET();
+      set_led_values();
       set_solid_leds();
+      led_to_check_reset();
     }
   }
 }
