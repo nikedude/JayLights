@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.c": "c",
+        "chrono": "cpp",
+        "algorithm": "cpp"
+    },
+    "cmake.configureOnOpen": false
+}
